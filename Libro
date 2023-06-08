@@ -1,0 +1,82 @@
+import java.io.Serializable;
+import java.util.List;
+
+enum Categoria {
+    AVENTURAS,
+    CIENCIA_FICCION,
+    ROMANTICA,
+    HISTORIA,
+    ARTE
+}
+
+class Libro implements Serializable {
+    private String titulo;
+    private List<String> autores;
+    private String identificador;
+    private Categoria categoria;
+    private int edadRecomendada;
+    private boolean prestado;
+
+    public Libro(String titulo, List<String> autores, String identificador, Categoria categoria, int edadRecomendada) {
+        this.titulo = titulo;
+        this.autores = autores;
+        this.identificador = identificador;
+        this.categoria = categoria;
+        this.edadRecomendada = edadRecomendada;
+        this.prestado = false;
+    }
+
+    // Getters y setters
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public List<String> getAutores() {
+        return autores;
+    }
+
+    public void setAutores(List<String> autores) {
+        this.autores = autores;
+    }
+
+    public String getIdentificador() {
+        return identificador;
+    }
+
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public int getEdadRecomendada() {
+        return edadRecomendada;
+    }
+
+    public void setEdadRecomendada(int edadRecomendada) {
+        this.edadRecomendada = edadRecomendada;
+    }
+
+    public boolean estaPrestado() {
+        return prestado;
+    }
+
+    public void prestar() {
+        this.prestado = true;
+    }
+
+    public void devolver() {
+        this.prestado = false;
+    }
+}
