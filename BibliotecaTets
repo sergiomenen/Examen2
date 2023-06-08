@@ -1,0 +1,56 @@
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+class BibliotecaTest {
+    private Biblioteca biblioteca;
+
+    @BeforeEach
+    void setUp() {
+        biblioteca = new Biblioteca();
+    }
+
+    @Test
+    void testPrestarLibro() {
+        Libro libro = new Libro("El señor de los anillos", List.of("J.R.R. Tolkien"), "001", Categoria.AVENTURAS, 12);
+        Usuario usuario = new Usuario("Juan", "Perez", "Gomez", "1990-05-15", "12345678A");
+
+        biblioteca.agregarLibro(libro);
+        biblioteca.agregarUsuario(usuario);
+
+        biblioteca.prestarLibro(libro, usuario);
+
+        Assertions.assertTrue(libro.estaPrestado());
+    }
+
+    @Test
+    void testDevolverLibro() {
+        Libro libro = new Libro("El señor de los anillos", List.of("J.R.R. Tolkien"), "001", Categoria.AVENTURAS, 12);
+        Usuario usuario = new Usuario("Juan", "Perez", "Gomez", "1990-05-15", "12345678A");
+
+        biblioteca.agregarLibro(libro);
+        biblioteca.agregarUsuario(usuario);
+
+        biblioteca.prestarLibro(libro, usuario);
+        biblioteca.devolverLibro(libro);
+
+        Assertions.assertFalse(libro.estaPrestado());
+    }
+
+    @Test
+    void testListarLibrosPorTitulo() {
+        Libro libro1 = new Libro("El señor de los anillos", List.of("J.R.R. Tolkien"), "001", Categoria.AVENTURAS, 12);
+        Libro libro2 = new Libro("1984", List.of("George Orwell"), "002", Categoria.CIENCIA_FICCION, 16);
+
+        biblioteca.agregarLibro(libro1);
+        biblioteca.agregarLibro(libro2);
+
+        List<String> librosPorTitulo = biblioteca.listarLibrosPorTitulo();
+
+        Assertions.assertEquals(2, librosPorTitulo.size());
+        Assertions.assertTrue(librosPorTitulo.contains("El señor de los anillos"));
+        Assertions.assertTrue(librosPorTitulo.contains("1984"));
+    }
+}
