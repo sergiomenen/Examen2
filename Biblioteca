@@ -1,0 +1,108 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+class Biblioteca implements Serializable {
+    private List<Libro> libros;
+    private List<Usuario> usuarios;
+
+    public Biblioteca() {
+        this.libros = new ArrayList<>();
+        this.usuarios = new ArrayList<>();
+    }
+
+    public void agregarLibro(Libro libro) {
+        libros.add(libro);
+    }
+
+    public void eliminarLibro(Libro libro) {
+        libros.remove(libro);
+    }
+
+    public void agregarUsuario(Usuario usuario) {
+        usuarios.add(usuario);
+    }
+
+    public void eliminarUsuario(Usuario usuario) {
+        usuarios.remove(usuario);
+    }
+
+    public void prestarLibro(Libro libro, Usuario usuario) {
+        if (libro.estaPrestado()) {
+            System.out.println("El libro ya está prestado.");
+        } else if (usuario.getEdadRecomendada() < libro.getEdadRecomendada()) {
+            System.out.println("El usuario no cumple con la edad recomendada para este libro.");
+        } else {
+            libro.prestar();
+            System.out.println("El libro \"" + libro.getTitulo() + "\" ha sido prestado a " + usuario.getNombre());
+        }
+    }
+
+    public void devolverLibro(Libro libro) {
+        libro.devolver();
+        System.out.println("El libro \"" + libro.getTitulo() + "\" ha sido devuelto.");
+    }
+
+    public void listarLibrosPorTitulo() {
+        System.out.println("Lista de libros por título:");
+        for (Libro libro : libros) {
+            System.out.println(libro.getTitulo());
+        }
+    }
+
+    public void listarLibrosPorCategoria(Categoria categoria) {
+        System.out.println("Lista de libros de la categoría " + categoria + ":");
+        for (Libro libro : libros) {
+            if (libro.getCategoria() == categoria) {
+                System.out.println(libro.getTitulo());
+            }
+        }
+    }
+
+    public void listarLibrosPrestados() {
+        System.out.println("Lista de libros prestados:");
+        for (Libro libro : libros) {
+            if (libro.estaPrestado()) {
+                System.out.println(libro.getTitulo());
+            }
+        }
+    }
+
+    public void listarLibrosDisponibles() {
+        System.out.println("Lista de libros disponibles:");
+        for (Libro libro : libros) {
+            if (!libro.estaPrestado()) {
+                System.out.println(libro.getTitulo());
+            }
+        }
+    }
+
+    public void listarLibrosPorUsuario(Usuario usuario) {
+        System.out.println("Lista de libros prestados a " + usuario.getNombre() + ":");
+        for (Libro libro : libros) {
+            if (libro.estaPrestado()) {
+                System.out.println(libro.getTitulo());
+            }
+        }
+    }
+
+    public void almacenarEstadoBiblioteca(String archivo) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
+            oos.writeObject(this);
+            System.out.println("Estado de la biblioteca almacenado en el archivo: " + archivo);
+        } catch (IOException e) {
+            System.out.println("Error al almacenar el estado de la biblioteca: " + e.getMessage());
+        }
+    }
+
+    public static Biblioteca cargarEstadoBiblioteca(String archivo) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
+            Biblioteca biblioteca = (Biblioteca) ois.readObject();
+            System.out.println("Estado de la biblioteca cargado desde el archivo: " + archivo);
+            return biblioteca;
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error al cargar el estado de la biblioteca: " + e.getMessage());
+            return null;
+        }
+    }
+}
